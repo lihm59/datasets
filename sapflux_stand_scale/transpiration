@@ -1,5 +1,5 @@
 clear;clc;
-% sapflux transpiration upscaling scheme
+% sapflux transpiration upscaling scheme (write in Matlab)
 
 % original author: MalditoBarbudo (https://github.com/MalditoBarbudo) write in R
 % article: Rafael Poyatos et al., 2020 SAPFLUXNET: A global database of sap flow measurements      DOI: 10.5281/zenodo.3971689
