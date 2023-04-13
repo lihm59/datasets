@@ -1,1 +1,78 @@
+clear;clc;
+% sapflux transpiration upscaling scheme
+
+% original author: MalditoBarbudo (https://github.com/MalditoBarbudo) write in R
+% article: Rafael Poyatos et al., 2020 SAPFLUXNET: A global database of sap flow measurements      DOI: 10.5281/zenodo.3971689
+
+% Hongmei Li. 4/12/2023 The University of Tokyo: upscaling scheme from tree to stand-level 
+% sapflux datasets: https://zenodo.org/record/3971689/files/0.1.5.zip?download=1 (you can also download through R)
+
+% upscaling scheme (Nelson et al., 2020):  
+% In order to obtain stand-level Transpiration(T), we normalized the sap flow of each tree to per area and averaged to each species in the datasets at
+% first. Then we multiplied it with the basal area of each species. The total species basal area at each site
+% in the datasets are more than 90% of the stand area. At the last, stand-level T could be calculated by summing species-level T
+
+% Stand-scale unit: [mm/day]
+
+% code:
+% stand-scale: (sapflow/pl_sapw_area)*st_basal_area*sp_basal_area_perc*24*10/10000 [mm/day]
+
+% read site-name
+[~,sitename]=xlsread('D:\PhD\zhongwang-datasets\sites.xlsx',1,'A2:A195');
+
+% P_read_data
+% sapf
+folder_sapf = 'D:\PhD\zhongwang-datasets\upscale\plant\sapf_data\';
+file_list_sapf = dir(fullfile(folder_sapf, '*sapf_data.csv'));
+% plant
+folder_plant = 'D:\PhD\zhongwang-datasets\upscale\plant\plant_md\';
+file_list_plant = dir(fullfile(folder_plant, '*plant_md.csv'));
+% stand 
+folder_stand = 'D:\PhD\zhongwang-datasets\upscale\plant\stand_md\';
+file_list_stand = dir(fullfile(folder_stand, '*stand_md.csv'));
+% stand 
+folder_species = 'D:\PhD\zhongwang-datasets\upscale\plant\species\';
+file_list_species = dir(fullfile(folder_species, '*species_md.csv'));
+
+% for i = 35      single site check
+for i = 180:length(file_list_stand)
+    i    % check for process
+%   sap_data
+    sap_name = file_list_sapf(i).name;
+    sapf_raw = xlsread([folder_sapf,sap_name]);
+    [~,time_step]=xlsread([folder_sapf,sap_name]);
+    time_len = length(time_step);
+
+%   plant_data
+    plant_name = file_list_plant(i).name;
+    pl_sapw_area_raw = xlsread([folder_plant,plant_name]);
+    pl_sapw_area = pl_sapw_area_raw(:,12)';
+
+%   stand_data
+    stand_name = file_list_stand(i).name;
+    st_basal_ara_raw = xlsread([folder_stand,stand_name]);
+    st_basal_ara = st_basal_ara_raw(:,3);
+
+%   species data
+    species_name = file_list_species(i).name;
+    sp_basal_area_perc_raw = xlsread([folder_species,species_name]);
+    sp_basal_area_perc = sum(sp_basal_area_perc_raw(:,1)) / 100;
+
+%   upscale from tree to site-level
+%   24*10: cm3/h --> mm/day
+%   10000: m2/ha --> m2
+    y1=nanmean((sapf_raw(1:length(sapf_raw),:)./repmat(pl_sapw_area,size(sapf_raw(1:length(sapf_raw),:),1),1))*st_basal_ara*sp_basal_area_perc*24*10/10000,2);
+
+%   write in .xlsx      
+    str = [sitename{i}];
+    format ={'.xlsx'};
+    file_name = strcat(str,format);
+%   cell to char
+    str_2 = cell2mat(file_name);
+%   xlswrite(str,A);
+    xlswrite(str_2,time_step(2:time_len,1),'sheet1','A1');
+    xlswrite(str_2,y1,'sheet1','B1');
+    clear pl_sapw_area; st_basal_ara_raw; pl_sapw_area_raw; sapf_raw; time_step;time_len;y1;time_len;str;str_2;
+end
+
 
