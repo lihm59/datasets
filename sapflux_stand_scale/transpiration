@@ -18,20 +18,20 @@ clear;clc;
 % stand-scale: (sapflow/pl_sapw_area)*st_basal_area*sp_basal_area_perc*24*10/10000 [mm/day]
 
 % read site-name
-[~,sitename]=xlsread('D:\PhD\zhongwang-datasets\sites.xlsx',1,'A2:A195');
+[~,sitename]=xlsread('sites.xlsx',1,'A2:A195');
 
 % P_read_data
 % sapf
-folder_sapf = 'D:\PhD\zhongwang-datasets\upscale\plant\sapf_data\';
+folder_sapf = '\sapf_data\';
 file_list_sapf = dir(fullfile(folder_sapf, '*sapf_data.csv'));
 % plant
-folder_plant = 'D:\PhD\zhongwang-datasets\upscale\plant\plant_md\';
+folder_plant = '\plant_md\';
 file_list_plant = dir(fullfile(folder_plant, '*plant_md.csv'));
 % stand 
-folder_stand = 'D:\PhD\zhongwang-datasets\upscale\plant\stand_md\';
+folder_stand = '\stand_md\';
 file_list_stand = dir(fullfile(folder_stand, '*stand_md.csv'));
 % stand 
-folder_species = 'D:\PhD\zhongwang-datasets\upscale\plant\species\';
+folder_species = '\species\';
 file_list_species = dir(fullfile(folder_species, '*species_md.csv'));
 
 % for i = 35      single site check
