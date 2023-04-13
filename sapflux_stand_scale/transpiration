@@ -30,7 +30,7 @@ file_list_plant = dir(fullfile(folder_plant, '*plant_md.csv'));
 % stand 
 folder_stand = '\stand_md\';
 file_list_stand = dir(fullfile(folder_stand, '*stand_md.csv'));
-% stand 
+% species 
 folder_species = '\species\';
 file_list_species = dir(fullfile(folder_species, '*species_md.csv'));
 
