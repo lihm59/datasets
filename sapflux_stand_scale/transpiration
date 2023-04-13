@@ -35,7 +35,7 @@ folder_species = '\species\';
 file_list_species = dir(fullfile(folder_species, '*species_md.csv'));
 
 % for i = 35      single site check
-for i = 180:length(file_list_stand)
+for i = 1:length(file_list_stand)
     i    % check for process
 %   sap_data
     sap_name = file_list_sapf(i).name;
